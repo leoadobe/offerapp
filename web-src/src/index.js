@@ -87,6 +87,18 @@ function extractError (payload, fallback) {
   return payload?.details?.[0]?.message || payload?.error || fallback
 }
 
+function getOfferPathFromUrl () {
+  const params = new URLSearchParams(window.location.search)
+  const value = params.get('offerPath')
+  return typeof value === 'string' && value.trim() ? value.trim() : ''
+}
+
+function updateOfferPathInUrl (offerPath) {
+  const url = new URL(window.location.href)
+  url.searchParams.set('offerPath', offerPath)
+  window.history.replaceState({}, '', url)
+}
+
 async function loadOffer (offerPath) {
   setStatus('Loading offer...')
 
@@ -120,7 +132,10 @@ form.addEventListener('submit', (event) => {
     setStatus('Please provide a valid offerPath', true)
     return
   }
+  updateOfferPathInUrl(value)
   loadOffer(value)
 })
 
-loadOffer(offerPathInput.value.trim())
+const initialOfferPath = getOfferPathFromUrl() || offerPathInput.value.trim()
+offerPathInput.value = initialOfferPath
+loadOffer(initialOfferPath)
