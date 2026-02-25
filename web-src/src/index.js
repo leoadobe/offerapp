@@ -13,7 +13,10 @@ const offerPathInput = document.getElementById('offerPath')
 const statusText = document.getElementById('status')
 
 const webBanner = document.getElementById('web-banner')
+const splitBanner = document.getElementById('split-banner')
 const splitLeft = document.getElementById('split-left')
+const splitRight = document.getElementById('split-right')
+const splitLogo = document.getElementById('split-logo')
 
 const webPreTitle = document.getElementById('web-pre-title')
 const webHeadline = document.getElementById('web-headline')
@@ -34,6 +37,33 @@ function setBannerImage (url) {
   const safeUrl = url || ''
   webBanner.style.backgroundImage = safeUrl ? `url("${safeUrl}")` : 'none'
   splitLeft.style.backgroundImage = safeUrl ? `url("${safeUrl}")` : 'none'
+}
+
+function getAssetUrl (asset) {
+  if (!asset) {
+    return ''
+  }
+
+  if (typeof asset === 'string') {
+    return asset.trim()
+  }
+
+  return asset._publishUrl || asset.url || asset.src || ''
+}
+
+function setSplitLogo (logoUrl) {
+  const safeUrl = typeof logoUrl === 'string' ? logoUrl.trim() : ''
+  const hasLogo = Boolean(safeUrl)
+
+  splitBanner.classList.toggle('no-logo', !hasLogo)
+  splitRight.classList.toggle('is-transparent', !hasLogo)
+  splitLogo.alt = hasLogo ? 'Offer logo' : ''
+
+  if (hasLogo) {
+    splitLogo.src = safeUrl
+  } else {
+    splitLogo.removeAttribute('src')
+  }
 }
 
 function setTextContent (element, value, fallback = '') {
@@ -64,7 +94,8 @@ function mapOfferToUi (offer) {
   const detail = getDetailText(offer.detail)
   const ctaText = offer.callToAction || 'See More'
   const ctaUrl = offer.ctaUrl || ''
-  const heroImage = offer.heroImage?._publishUrl || offer.heroImage?.url || ''
+  const heroImage = getAssetUrl(offer.heroImage)
+  const logoImage = getAssetUrl(offer.logo)
 
   setTextContent(webPreTitle, preTitle)
   setTextContent(webHeadline, headline)
@@ -77,6 +108,7 @@ function mapOfferToUi (offer) {
   setCta(splitCta, ctaText, ctaUrl)
 
   setBannerImage(heroImage)
+  setSplitLogo(logoImage)
 }
 
 function extractOffer (payload) {

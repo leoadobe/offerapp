@@ -142,6 +142,10 @@ body {
   grid-template-columns: 2fr 1fr;
 }
 
+.split-banner.no-logo {
+  grid-template-columns: 1fr;
+}
+
 .split-left {
   background-position: center;
   background-repeat: no-repeat;
@@ -163,27 +167,19 @@ body {
   justify-content: center;
 }
 
-.bank-mark {
-  display: inline-flex;
-  align-items: center;
-  font-size: clamp(32px, 3.2vw, 52px);
-  font-weight: 800;
-  line-height: 1;
+.split-right.is-transparent {
+  display: none;
 }
 
-.mark-box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 10px 10px;
-  border-radius: 8px;
-  color: #fff;
-  background: #1a9bb5;
+.split-logo {
+  display: none;
+  max-width: 82%;
+  max-height: 82%;
+  object-fit: contain;
 }
 
-.mark-text {
-  color: #101728;
-  margin-left: 4px;
+.split-right:not(.is-transparent) .split-logo {
+  display: block;
 }
 
 @media (max-width: 900px) {
